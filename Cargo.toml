@@ -1,0 +1,6 @@
+[package]
+name = "rplrs"
+version = "0.1.0"
+authors = ["Jean-Francois Saguin <jfsaguin@gmail.com>"]
+
+[dependencies]
