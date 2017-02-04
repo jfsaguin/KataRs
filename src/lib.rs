@@ -2,25 +2,11 @@ mod rpn {
 
     use std::str::FromStr;
 
-    fn plus(numbers: &mut Vec<f64>) {
+    type Stack = Vec<f64>;
+    fn bi_operands(numbers: &mut Vec<f64>, calc: &Fn(f64, f64) -> f64) {
         let right = numbers.pop().unwrap();
         let left = numbers.pop().unwrap();
-        numbers.push(left + right);
-    }
-    fn minus(numbers: &mut Vec<f64>) {
-        let right = numbers.pop().unwrap();
-        let left = numbers.pop().unwrap();
-        numbers.push(left - right);
-    }
-    fn multiply(numbers: &mut Vec<f64>) {
-        let right = numbers.pop().unwrap();
-        let left = numbers.pop().unwrap();
-        numbers.push(left * right);
-    }
-    fn divide(numbers: &mut Vec<f64>) {
-        let right = numbers.pop().unwrap();
-        let left = numbers.pop().unwrap();
-        numbers.push(left / right);
+        numbers.push(calc(left, right));
     }
 
     pub fn compute(expression: &str) -> f64 {
@@ -30,10 +16,10 @@ mod rpn {
 
         for token in tokens {
             match token {
-                "+" => plus(&mut numbers),
-                "-" => minus(&mut numbers),
-                "*" => multiply(&mut numbers),
-                "/" => divide(&mut numbers),
+                "+" => bi_operands(&mut numbers, &|x, y| x + y),
+                "-" => bi_operands(&mut numbers, &|x, y| x - y),
+                "*" => bi_operands(&mut numbers, &|x, y| x * y),
+                "/" => bi_operands(&mut numbers, &|x, y| x / y),
                 _ => numbers.push(f64::from_str(token).unwrap()),
             }
 
@@ -75,6 +61,7 @@ mod tests {
     #[test]
     fn it_should_compute_expressions() {
         assert_eq!(7.0, rpn::compute("1 2 3 * +"));
+        assert_eq!(2.0, rpn::compute("12 2 4 + /"));
     }
 
 }
