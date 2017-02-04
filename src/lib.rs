@@ -36,19 +36,9 @@ mod tests {
     use std::f64;
 
     #[test]
-    fn it_should_add_two_numbers() {
+    fn it_should_add_compute_simple_operation() {
         assert_eq!(2.0, rpn::compute("1 1 +"));
-        assert_eq!(4.0, rpn::compute("2 2 +"));
-    }
-
-    #[test]
-    fn it_should_substract_two_numbers() {
-        assert_eq!(-4.0, rpn::compute("1 5 -"));
         assert_eq!(1.5, rpn::compute("2 0.5 -"));
-    }
-
-    #[test]
-    fn it_should_divide_and_multiply_two_numbers() {
         assert_eq!(5.0, rpn::compute("1 5 *"));
         assert_eq!(1.0, rpn::compute("2 2 /"));
     }
@@ -59,9 +49,9 @@ mod tests {
     }
 
     #[test]
-    fn it_should_compute_expressions() {
+    fn it_should_compute_multiple_expressions() {
         assert_eq!(7.0, rpn::compute("1 2 3 * +"));
-        assert_eq!(2.0, rpn::compute("12 2 4 + /"));
+        assert_eq!(2.0, rpn::compute("2 4 + 3 /"));
     }
 
 }
