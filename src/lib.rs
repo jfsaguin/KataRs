@@ -2,13 +2,16 @@ mod rpn {
 
     use std::str::FromStr;
 
-    type Stack = Vec<f64>;
     fn bi_operands(numbers: &mut Vec<f64>, calc: &Fn(f64, f64) -> f64) {
         let right = numbers.pop().unwrap();
         let left = numbers.pop().unwrap();
         numbers.push(calc(left, right));
     }
 
+    fn mono_operands(numbers: &mut Vec<f64>, calc: &Fn(f64) -> f64) {
+        let operand = numbers.pop().unwrap();
+        numbers.push(calc(operand));
+    }
     pub fn compute(expression: &str) -> f64 {
 
         let tokens: Vec<&str> = expression.split(" ").collect();
@@ -20,6 +23,7 @@ mod rpn {
                 "-" => bi_operands(&mut numbers, &|x, y| x - y),
                 "*" => bi_operands(&mut numbers, &|x, y| x * y),
                 "/" => bi_operands(&mut numbers, &|x, y| x / y),
+                "sqrt" => mono_operands(&mut numbers, &|x| x.sqrt()),
                 _ => numbers.push(f64::from_str(token).unwrap()),
             }
 
@@ -41,6 +45,8 @@ mod tests {
         assert_eq!(1.5, rpn::compute("2 0.5 -"));
         assert_eq!(5.0, rpn::compute("1 5 *"));
         assert_eq!(1.0, rpn::compute("2 2 /"));
+        assert_eq!(3.0, rpn::compute("9 sqrt"));
+
     }
 
     #[test]
@@ -52,6 +58,8 @@ mod tests {
     fn it_should_compute_multiple_expressions() {
         assert_eq!(7.0, rpn::compute("1 2 3 * +"));
         assert_eq!(2.0, rpn::compute("2 4 + 3 /"));
+        assert_eq!(3.0, rpn::compute("2 4 3 + + sqrt"));
+
     }
 
 }
